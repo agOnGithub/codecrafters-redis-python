@@ -12,7 +12,7 @@ def main():
 
 def return_pong(Client: socket.socket, pong):
     Client.recv(1024)
-    Client.sendall(pong.encode())
+    Client.send(pong.encode())
 
 if __name__ == "__main__":
     main()
