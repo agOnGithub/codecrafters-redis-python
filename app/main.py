@@ -10,9 +10,8 @@ def main():
 
 def send_reply(conn: socket.socket):
     pong = "+PONG\r\n"
-    
+    cmd = conn.recv(1024).decode()
     while True:
-        cmd = conn.recv(1024)
         if "ping" in str(cmd.decode("utf-8")).lower():
             conn.send(pong.encode())
         else:
