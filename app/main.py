@@ -12,8 +12,8 @@ def main():
         Thread(target=send_pong, args=(conn, pong)).start()
 
 def send_pong(conn: socket.socket, pong):
-    conn.recv(1024)
-    conn.send(pong.encode())
+    while conn.recv(1024):
+        conn.send(pong.encode())
 
 if __name__ == "__main__":
     main()
