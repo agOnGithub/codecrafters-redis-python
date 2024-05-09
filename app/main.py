@@ -11,8 +11,8 @@ def main():
         Thread(target=return_pong, args=(conn, pong)).start()
 
 def return_pong(Client: socket.socket, pong):
-    conn.recv(1024)
-    conn.sendall(pong.encode())
+    Client.recv(1024)
+    Client.sendall(pong.encode())
 
 if __name__ == "__main__":
     main()
