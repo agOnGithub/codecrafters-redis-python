@@ -11,7 +11,7 @@ def main():
         conn, _ = server_socket.accept() # wait for client
         Thread(target=send_pong, args=(conn, pong)).start()
 
- def send_pong(conn: socket.socket, pong):
+def send_pong(conn: socket.socket, pong):
     conn.recv(1024)
     conn.send(pong.encode())
 
