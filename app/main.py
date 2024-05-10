@@ -8,7 +8,6 @@ def handle_client(client_socket, addr):
             if not data:
                 break
 
-            client_socket.sendall(b"+PONG\r\n") # decode and process commands
             decoded_data = data.decode("utf-8").strip()
             parts = decoded_data.split("\r\n") # redis is case-insensitive
             command = parts[2].upper()
@@ -28,7 +27,6 @@ def main():
     while True:
         client_socket, addr = server_socket.accept()
         client_thread = threading.Thread(target=handle_client, args=(client_socket, addr)).start()
-        #client_thread.start()
 
 if __name__ == "__main__":
     main()
