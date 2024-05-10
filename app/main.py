@@ -1,30 +1,34 @@
 import socket
-from threading import Thread
+import threading
 
-def send_reply(conn: socket.socket):
-    pong = "+PONG\r\n"
-    with conn:
+def handle_client(client_socket, addr):
+    try:
         while True:
-            cmd = conn.recv(1024).decode()
-            data = str(data.decode("utf-8")).strip()
-            parts = data.split("\r\n")
-            command = parts[2].lower()
+            data = client_socket.recv(1024)
+            if not data:
+                break
 
-            if "ping" == command:
-                conn.sendall(b"+PONG\r\n")
+            client_socket.sendall(b"+PONG\r\n") # decode and process commands
+            decoded_data = data.decode("utf-8").strip()
+            parts = decoded_data.split("\r\n") # redis is case-insensitive
+            command = parts[2].upper()
 
-            elif "echo" == command:
+            if command == "ECHO":
                 message = parts[4]  # the command is the 5th part
                 response = f"${len(message)}\r\n{message}\r\n"
-                conn.sendall(response.encode("utf-8"))
+                client_socket.sendall(response.encode())  # response.encode() --> binary format data
+            else:
+                client_socket.sendall(b"+PONG\r\n")
+    finally:
+        client_socket.close()
 
 def main():
     server_socket = socket.create_server(("localhost", 6379), reuse_port=True)
-    server_socket.listen()
-    
+
     while True:
-        conn, _ = server_socket.accept() # wait for client
-        Thread(target=send_reply, args=(conn)).start()
+        client_socket, addr = server_socket.accept()
+        client_thread = threading.Thread(target=handle_client, args=(client_socket, addr)).start()
+        #client_thread.start()
 
 if __name__ == "__main__":
     main()
