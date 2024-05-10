@@ -22,8 +22,8 @@ def handle_client(client_socket, addr):
                 client_socket.sendall(b"+PONG\r\n")
             elif command == "SET":
                 key = parts[4]
-                value = parts[5]
-                print(parts)
+                value = parts[6]
+                print(value)
                 MEMORY[key] = value
                 client_socket.sendall(b"+OK\r\n")
             elif command == "GET":
