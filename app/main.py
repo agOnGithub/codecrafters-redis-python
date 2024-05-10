@@ -5,10 +5,24 @@ def send_reply(conn: socket.socket):
     pong = "+PONG\r\n"
     while True:
         cmd = conn.recv(1024).decode()
-        if cmd.split("\r\n")[1].startswith("+PING"):
-            conn.send(pong.encode())
-        else:
-            conn.send(cmd.encode())
+        data = str(data.decode("utf-8")).strip()
+        parts = data.split("\r\n")
+        command = parts[2].lower()
+
+        if "ping" == command:
+             conn.sendall(pong.encode("utf-8"))
+
+        elif "echo" == command:
+            raw_message_length = len(parts)
+            message = ""
+
+            for i in range(4, raw_message_length, 2):
+                message += parts[i]
+                if i < raw_message_length - 1:
+                    message += " "
+                    
+            message_send = f"${len(message)}\r\n{message}\r\n"
+            conn.sendall(message_send.encode("utf-8"))
 
 def main():
     server_socket = socket.create_server(("localhost", 6379), reuse_port=True)
