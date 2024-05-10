@@ -11,19 +11,12 @@ def send_reply(conn: socket.socket):
             command = parts[2].lower()
 
             if "ping" == command:
-                 conn.sendall(pong.encode("utf-8"))
+                conn.sendall(pong)
 
             elif "echo" == command:
-                raw_message_length = len(parts)
-                message = ""
-
-                for i in range(4, raw_message_length, 2):
-                    message += parts[i]
-                    if i < raw_message_length - 1:
-                        message += " "
-                        
-                message_send = f"${len(message)}\r\n{message}\r\n"
-                conn.sendall(message_send.encode("utf-8"))
+                message = parts[4]  # the command is the 5th part
+                response = f"${len(message)}\r\n{message}\r\n"
+                conn.sendall(response.encode("utf-8"))
 
 def main():
     server_socket = socket.create_server(("localhost", 6379), reuse_port=True)
