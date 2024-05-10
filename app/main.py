@@ -27,6 +27,7 @@ def handle_client(client_socket, addr):
                 client_socket.sendall(b"+OK\r\n")
             elif command == "GET":
                 key = parts[4]
+                print(key)
                 value = MEMORY.get(key)
                 response = f"${len(value)}\r\n{value}\r\n"
                 client_socket.sendall(response.encode())
