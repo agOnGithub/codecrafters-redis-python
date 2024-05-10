@@ -1,6 +1,8 @@
 import socket
 import threading
 
+MEMORY = {}
+
 def handle_client(client_socket, addr):
     try:
         while True:
@@ -16,8 +18,19 @@ def handle_client(client_socket, addr):
                 message = parts[4]  # the command is the 5th part
                 response = f"${len(message)}\r\n{message}\r\n"
                 client_socket.sendall(response.encode())  # response.encode() --> binary format data
-            else:
+            elif command == "PING":
                 client_socket.sendall(b"+PONG\r\n")
+            elif command == "SET":
+                key = parts[4]
+                value = parts[5]
+                MEMORY[key] = value
+                client_socket.sendall(b"+OK\r\n")
+            elif command == "GET":
+                key = parts[4]
+                val = MEMORY.get(key)
+                response = f"${len(value)}\r\n{value}\r\n"
+                client_socket.sendall(response.encode())
+            
     finally:
         client_socket.close()
 
