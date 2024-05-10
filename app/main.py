@@ -11,7 +11,7 @@ def send_reply(conn: socket.socket):
             command = parts[2].lower()
 
             if "ping" == command:
-                conn.sendall(pong)
+                conn.sendall(b"+PONG\r\n")
 
             elif "echo" == command:
                 message = parts[4]  # the command is the 5th part
