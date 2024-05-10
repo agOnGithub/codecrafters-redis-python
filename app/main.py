@@ -23,12 +23,12 @@ def handle_client(client_socket, addr):
             elif command == "SET":
                 key = parts[4]
                 value = parts[5]
+                print(value)
                 MEMORY[key] = value
                 client_socket.sendall(b"+OK\r\n")
             elif command == "GET":
                 key = parts[4]
                 value = MEMORY.get(key)
-                print(value)
                 response = f"${len(value)}\r\n{value}\r\n"
                 client_socket.sendall(response.encode())
             
