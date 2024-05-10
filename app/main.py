@@ -11,8 +11,8 @@ def main():
 def send_reply(conn: socket.socket):
     pong = "+PONG\r\n"
     cmd = conn.recv(1024).decode()
-    if cmd.split(" ")[0] == "ping":
-        conn.send(ping.encode())
+    if cmd.split(" ")[1].startswith("PING"):
+        conn.send(pong.encode())
     else:
         conn.send(cmd.encode())
 
