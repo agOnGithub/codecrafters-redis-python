@@ -33,7 +33,7 @@ def handle_client(client_socket, addr):
                 elif len(parts) > 7 and parts[8].upper() == "PX":
                     key = parts[4]
                     value = parts[6]
-                    expire = parts[8]
+                    expire = parts[10]
                     MEMORY[key] = value
                     EXPIRE[key] = time.time() * 1000 + int(expire)
                     client_socket.sendall(b"+OK\r\n")
