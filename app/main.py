@@ -1,7 +1,9 @@
 import socket
 import threading
+import time
 
 MEMORY = {}
+EXPIRE = {}
 
 def handle_client(client_socket, addr):
     try:
@@ -21,13 +23,26 @@ def handle_client(client_socket, addr):
             elif command == "PING":
                 client_socket.sendall(b"+PONG\r\n")
             elif command == "SET":
-                key = parts[4]
-                value = parts[6]
-                MEMORY[key] = value
-                client_socket.sendall(b"+OK\r\n")
+                if len(parts) == 6:
+                    key = parts[4]
+                    value = parts[6]
+                    MEMORY[key] = value
+                    client_socket.sendall(b"+OK\r\n")
+                elif len(parts) == 8 and parts[8].upper() == "PX"
+                    key = parts[4]
+                    value = parts[6]
+                    expire = parts[8]
+                    MEMORY[key] = value
+                    EXPIRE[key] = time.time() * 1000 + int(expire)
+                    client_socket.sendall(b"+OK\r\n")
             elif command == "GET":
                 key = parts[4]
                 value = MEMORY.get(key)
+                if key in EXPIRE:
+                    if time.time() * 1000 > EXPIRE[key]:
+                        del MEMORY[key]
+                        del EXPIRE[key]
+                        client_socket.sendall(b"$-1\r\n")
                 response = f"${len(value)}\r\n{value}\r\n"
                 client_socket.sendall(response.encode())
             
