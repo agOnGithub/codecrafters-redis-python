@@ -23,7 +23,7 @@ def handle_client(client_socket, addr):
             elif command == "PING":
                 client_socket.sendall(b"+PONG\r\n")
             elif command == "SET":
-                if len(parts) < 7:
+                if len(parts) < 8:
                     key = parts[4]
                     value = parts[6]
                     MEMORY[key] = value
