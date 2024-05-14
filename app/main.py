@@ -39,15 +39,16 @@ def handle_client(client_socket, addr):
                 key = parts[4]
                 value = MEMORY.get(key)
                 if key in EXPIRE:
-                    if time.time() * 1000 > EXPIRE[key]:
+                    if time.time() * 1000 < EXPIRE[key]:
+                        response = f"${len(value)}\r\n{value}\r\n"
+                        client_socket.sendall(response.encode())
+                    else:
                         del MEMORY[key]
                         del EXPIRE[key]
                         client_socket.sendall(b"$-1\r\n")
-                   # else:
-                   #     response = f"${len(value)}\r\n{value}\r\n"
-                    #    client_socket.sendall(response.encode())
-                response = f"${len(value)}\r\n{value}\r\n"
-                client_socket.sendall(response.encode())
+                else:
+                    response = f"${len(value)}\r\n{value}\r\n"
+                    client_socket.sendall(response.encode())
             
     finally:
         client_socket.close()
