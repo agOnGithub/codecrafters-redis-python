@@ -42,7 +42,7 @@ def handle_client(client_socket, addr):
                     if time.time() * 1000 > EXPIRE[key]:
                         del MEMORY[key]
                         del EXPIRE[key]
-                        client_socket.sendall("$-1\r\n")
+                        client_socket.sendall("$-1")
                     else:
                         response = f"${len(value)}\r\n{value}\r\n"
                         client_socket.sendall(response.encode())
