@@ -25,12 +25,12 @@ def handle_client(client_socket, addr):
             elif command == "SET":
                 print(parts)
                 print(len(parts))
-                if len(parts) == 6:
+                if len(parts) < 7:
                     key = parts[4]
                     value = parts[6]
                     MEMORY[key] = value
                     client_socket.sendall(b"+OK\r\n")
-                elif len(parts) == 8 and parts[8].upper() == "PX":
+                elif len(parts) > 7 and parts[8].upper() == "PX":
                     key = parts[4]
                     value = parts[6]
                     expire = parts[8]
