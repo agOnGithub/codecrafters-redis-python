@@ -49,6 +49,12 @@ def handle_client(client_socket, addr):
                 else:
                     response = f"${len(value)}\r\n{value}\r\n"
                     client_socket.sendall(response.encode())
+            elif command == "TYPE":
+                key = parts[4]
+                if key in MEMORY:
+                    client_socket.sendall(b"+string\r\n")
+                else:
+                    client_socket.sendall(b"+none\r\n")
             
     finally:
         client_socket.close()
