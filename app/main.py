@@ -23,6 +23,8 @@ def handle_client(client_socket, addr):
             elif command == "PING":
                 client_socket.sendall(b"+PONG\r\n")
             elif command == "SET":
+                print(parts)
+                print(len(parts))
                 if len(parts) == 6:
                     key = parts[4]
                     value = parts[6]
