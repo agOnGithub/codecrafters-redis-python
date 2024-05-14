@@ -47,7 +47,7 @@ def handle_client(client_socket, addr):
                         response = f"${len(value)}\r\n{value}\r\n"
                         client_socket.sendall(response.encode())
                 response = f"${len(value)}\r\n{value}\r\n"
-                client_socket.sendall(response.encode())
+              #  client_socket.sendall(response.encode())
             
     finally:
         client_socket.close()
