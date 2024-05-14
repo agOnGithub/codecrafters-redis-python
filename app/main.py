@@ -23,8 +23,6 @@ def handle_client(client_socket, addr):
             elif command == "PING":
                 client_socket.sendall(b"+PONG\r\n")
             elif command == "SET":
-                print(parts)
-                print(len(parts))
                 if len(parts) < 7:
                     key = parts[4]
                     value = parts[6]
@@ -45,6 +43,9 @@ def handle_client(client_socket, addr):
                         del MEMORY[key]
                         del EXPIRE[key]
                         client_socket.sendall(b"$-1\r\n")
+                    else:
+                        response = f"${len(value)}\r\n{value}\r\n"
+                        client_socket.sendall(response.encode())
                 response = f"${len(value)}\r\n{value}\r\n"
                 client_socket.sendall(response.encode())
             
